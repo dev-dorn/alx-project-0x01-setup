@@ -1,70 +1,42 @@
 import React from 'react';
+import UserCard from '@/components/common/UserCard';
 import Header from '@/components/layout/Header';
+import { User } from '@/interfaces';
 
+interface UsersPageProps {
+  users: User[];
+}
 
-// Mock data for demonstration
-const mockUsers = [
-  { id: 1, name: 'John Doe', email: 'john@example.com', role: 'Admin' },
-  { id: 2, name: 'Jane Smith', email: 'jane@example.com', role: 'User' },
-  { id: 3, name: 'Mike Johnson', email: 'mike@example.com', role: 'Moderator' },
-  { id: 4, name: 'Sarah Wilson', email: 'sarah@example.com', role: 'User' }
-];
-
-const UsersPage: React.FC = () => {
+const Users: React.FC<UsersPageProps> = ({ users }) => {
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen bg-gray-50">
       <Header />
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-8">All Users</h1>
-        <div className="bg-white shadow-md rounded-lg overflow-hidden">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Name
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Email
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Role
-                </th>
-              </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
-              {mockUsers.map((user) => (
-                <tr key={user.id} className="hover:bg-gray-50">
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                    {user.name}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {user.email}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                      ${user.role === 'Admin' ? 'bg-red-100 text-red-800' : 
-                        user.role === 'Moderator' ? 'bg-yellow-100 text-yellow-800' : 
-                        'bg-green-100 text-green-800'}`}>
-                      {user.role}
-                    </span>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="flex justify-between items-center mb-8">
+          <h1 className="text-3xl font-bold text-gray-900">All Users</h1>
+          <button className="bg-blue-700 px-4 py-2 rounded-full text-white hover:bg-blue-800 transition">
+            Add User
+          </button>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {users.map((user: User) => (
+            <UserCard key={user.id} user={user} />
+          ))}
         </div>
       </div>
     </div>
   );
 };
-export async function getStaticProps(){
-  const response = await fetch("http://jsonplaceholder.typicode.com/users")
-  const posts =await response.json()
+
+export async function getStaticProps() {
+  const response = await fetch("https://jsonplaceholder.typicode.com/users");
+  const users = await response.json();
+
   return {
     props: {
-      posts
+      users
     }
-  }
-
+  };
 }
-export default UsersPage;
+
+export default Users;
