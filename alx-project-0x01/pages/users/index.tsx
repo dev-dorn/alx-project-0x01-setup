@@ -14,6 +14,7 @@ const Users: React.FC<UsersPageProps> = ({ posts: initialUsers }) => {
   const [users, setUsers] = useState<User[]>(initialUsers);
 
   const handleAddUser = (userData: UserData) => {
+    // Exclude 'id' from userData to avoid overwriting
     const { id, ...userDataWithoutId } = userData;
     const newUser: User = {
       id: Math.max(...users.map(u => u.id)) + 1,
@@ -53,7 +54,7 @@ const Users: React.FC<UsersPageProps> = ({ posts: initialUsers }) => {
         <UserModal 
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
-          onAddUser={handleAddUser}
+          onSubmit={handleAddUser}
         />
       </div>
     </div>
