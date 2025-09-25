@@ -1,7 +1,7 @@
-import { UserModalProps, UserData } from '@/interfaces';
+import { UserModalProps, UserData, UserProps } from '@/interfaces';
 import { useState } from 'react';
 
-const UserModal: React.FC<UserModalProps> = ({ isOpen, onClose, onAddUser }) => {
+const UserModal: React.FC<UserModalProps> = ({ isOpen, onClose, onSubmit }) => {
     const initialFormData: UserData = {
         id: 0,
         name: '',
@@ -26,11 +26,11 @@ const UserModal: React.FC<UserModalProps> = ({ isOpen, onClose, onAddUser }) => 
         }
     };
 
-    const [formData, setFormData] = useState<UserData>(initialFormData);
+    const [formData, setFormData] = useState<UserProps>(initialFormData);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        onAddUser(formData);
+        onSubmit(formData);
         setFormData(initialFormData);
         onClose();
     };
