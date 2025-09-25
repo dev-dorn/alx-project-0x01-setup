@@ -1,4 +1,5 @@
 import React from 'react';
+import Header from '@/components/layout/Header';
 import PostCard from '@/components/common/PostCard';
 
 // Mock data for demonstration
@@ -28,15 +29,18 @@ const mockPosts = [
 
 const PostsPage: React.FC = () => {
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-8">All Posts</h1>
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {mockPosts.map((post) => (
-            <PostCard key={post.id} post={post} />
-          ))}
+    <div className="flex flex-col min-h-screen">
+      <Header />
+      <main className="flex-grow bg-gray-50 py-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h1 className="text-3xl font-bold text-gray-900 mb-8">All Posts</h1>
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {mockPosts.map((post) => (
+              <PostCard key={post.id} post={post} />
+            ))}
+          </div>
         </div>
-      </div>
+      </main>
     </div>
   );
 };
