@@ -1,48 +1,39 @@
-import React from 'react';
-import Header from '@/components/layout/Header';
-import PostCard from '@/components/common/PostCard';
+import PostCard from "@/components/common/PostCard";
+import Header from "@/components/layout/Header";
+import { PostProps } from "@/interfaces";
 
-// Mock data for demonstration
-const mockPosts = [
-  {
-    id: 1,
-    title: 'Understanding Next.js',
-    body: 'Next.js is a React framework that enables server-side rendering and static site generation...',
-    author: 'John Doe',
-    date: '2024-01-15'
-  },
-  {
-    id: 2,
-    title: 'Tailwind CSS Best Practices',
-    body: 'Tailwind CSS is a utility-first CSS framework that allows for rapid UI development...',
-    author: 'Jane Smith',
-    date: '2024-01-14'
-  },
-  {
-    id: 3,
-    title: 'TypeScript in Modern Web Development',
-    body: 'TypeScript brings static typing to JavaScript, helping catch errors early...',
-    author: 'Mike Johnson',
-    date: '2024-01-13'
-  }
-];
-
-const PostsPage: React.FC = () => {
+const Posts: React.FC<PostProps[]> = ({ posts }) => {
+  console.log(posts)
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col h-screen">
       <Header />
-      <main className="flex-grow bg-gray-50 py-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-8">All Posts</h1>
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {mockPosts.map((post) => (
-              <PostCard key={post.id} post={post} />
-            ))}
-          </div>
+      <main className="p-4">
+        <div className="flex justify-between">
+        <h1 className=" text-2xl font-semibold">Post Content</h1>
+        <button className="bg-blue-700 px-4 py-2 rounded-full text-white">Add Post</button>
+        </div>
+        <div className="grid grid-cols-3 gap-2 ">
+          {
+            posts?.map(({ title, body, userId, id }: PostProps, key: number) => (
+              <PostCard title={title} body={body} userId={userId} id={id} key={key} />
+            ))
+          }
         </div>
       </main>
     </div>
-  );
-};
+  )
+}
 
-export default PostsPage;
+
+export async function getStaticProps() {
+  const response = await fetch("https://jsonplaceholder.typicode.com/posts")
+  const posts = await response.json()
+
+  return {
+    props: {
+      posts
+    }
+  }
+}
+
+export default Posts;
