@@ -1,28 +1,60 @@
 import React from 'react';
 import UserCard from '@/components/common/UserCard';
+import UserModal from '@/components/common/UserModal';
 import Header from '@/components/layout/Header';
-import { User } from '@/interfaces';
+import { User, UserData } from '@/interfaces';
+import { useState } from 'react';
 
 interface UsersPageProps {
   posts: User[];
 }
 
-const Users: React.FC<UsersPageProps> = ({ posts }) => {
+const Users: React.FC<UsersPageProps> = ({ posts: initialUsers }) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [users, setUsers] = useState<User[]>(initialUsers);
+
+  const handleAddUser = (userData: UserData) => {
+    const { id, ...userDataWithoutId } = userData;
+    const newUser: User = {
+      id: Math.max(...users.map(u => u.id)) + 1,
+      ...userDataWithoutId,
+      address: {
+        ...userData.address,
+        geo: { lat: '0', lng: '0' } // Default geo data
+      },
+      company: {
+        ...userData.company,
+        bs: 'Added via modal' // Default bs
+      }
+    };
+    
+    setUsers(prevUsers => [newUser, ...prevUsers]);
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900">All Users</h1>
-          <button className="bg-blue-700 px-4 py-2 rounded-full text-white hover:bg-blue-800 transition">
+          <button 
+            className="bg-blue-700 px-4 py-2 rounded-full text-white hover:bg-blue-800 transition"
+            onClick={() => setIsModalOpen(true)}
+          >
             Add User
           </button>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {posts.map((user: User) => (
+          {users.map((user: User) => (
             <UserCard key={user.id} user={user} />
           ))}
         </div>
+
+        <UserModal 
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          onAddUser={handleAddUser}
+        />
       </div>
     </div>
   );

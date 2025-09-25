@@ -1,4 +1,4 @@
-export interface Post {
+export interface Posts {
     userId: number;
     id: number;
     title: string;
@@ -44,4 +44,33 @@ export interface User {
 
 export interface UserProps {
     user: User;
+}
+
+export interface PostData {
+    userId: number;
+    id?: number;
+    title: string;
+    body: string;
+}
+
+export interface PostModalProps { // you can specify function as a type
+    onClose: () => void;
+    onSubmit: (post: PostData) => void;
+}
+export interface UserData {
+    id: number;
+    name: string;
+    username: string;
+    email: string;
+    address: Address;
+    phone: string;
+    website: string;
+    company: Company;
+
+}
+
+export interface UserModalProps {
+    isOpen: boolean;
+    onClose: () => void;
+    onAddUser: (user: UserData) => void;
 }
